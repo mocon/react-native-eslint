@@ -9,6 +9,8 @@ import {
     View,
 } from 'react-native';
 import { WebBrowser } from 'expo';
+import { Button } from 'react-native-elements';
+import Axios from 'axios';
 
 import { MonoText } from '../components/StyledText';
 
@@ -49,6 +51,16 @@ export default class HomeScreen extends React.Component {
         );
     };
 
+    sendRequest = () => {
+        Axios.get('https://api.github.com/users/mocon')
+            .then((response) => {
+                console.log(response.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
     render() {
         return (
             <View style={ styles.container }>
@@ -69,9 +81,13 @@ export default class HomeScreen extends React.Component {
                     <View style={ [ styles.codeHighlightContainer, styles.homeScreenFilename ] }>
                         <MonoText style={ styles.codeHighlightText }>screens/HomeScreen.js</MonoText>
                     </View>
-                    <Text style={ styles.getStartedText }>
-                        Change this text and your app will automatically reload.
-                    </Text>
+                    <Button
+                        raised
+                        buttonStyle={ { backgroundColor: 'blue', borderRadius: 3, width: '100%' } }
+                        textStyle={ { textAlign: 'center' } }
+                        title={ 'Send test request' }
+                        onPress={ () => { this.sendRequest(); } }
+                    />
                     </View>
                     <View style={ styles.helpContainer }>
                         <TouchableOpacity onPress={ this._handleHelpPress } style={ styles.helpLink }>
