@@ -19,6 +19,13 @@ export default class HomeScreen extends React.Component {
         header: null
     };
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            returnValueFromApi: 'No value yet'
+        };
+    }
+
     _maybeRenderDevelopmentModeWarning() {
         if (__DEV__) {
             const learnMoreButton = (
@@ -55,15 +62,24 @@ export default class HomeScreen extends React.Component {
         Axios.get('https://api.github.com/users/mocon')
             .then((response) => {
                 console.log(response.data);
+                this.setState({
+                    returnValueFromApi: response.data.name
+                });
             })
             .catch((error) => {
                 console.log(error);
+                this.setState({
+                    returnValueFromApi: 'There was an error!'
+                });
             });
     }
 
     render() {
+        const { returnValueFromApi } = this.state;
+
         return (
             <View style={ styles.container }>
+                <View style={ { 'alignItems': 'center', 'justifyContent': 'center' } } />
                 <ScrollView style={ styles.container } contentContainerStyle={ styles.contentContainer }>
                     <View style={ styles.welcomeContainer }>
                         <Image
@@ -83,9 +99,9 @@ export default class HomeScreen extends React.Component {
                     </View>
                     <Button
                         raised
-                        buttonStyle={ { backgroundColor: 'blue', borderRadius: 3, width: '100%' } }
+                        buttonStyle={ { backgroundColor: '#3b5998', borderRadius: 3, width: '100%' } }
                         textStyle={ { textAlign: 'center' } }
-                        title={ 'Send test request' }
+                        title={ returnValueFromApi }
                         onPress={ () => { this.sendRequest(); } }
                     />
                     </View>
